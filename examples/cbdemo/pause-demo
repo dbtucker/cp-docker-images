@@ -1,0 +1,14 @@
+#!/bin/bash
+
+curl -X PUT http://localhost:8083/connectors/TSource/pause
+
+curl -X PUT http://localhost:8083/connectors/FileSink/pause
+
+curl -X PUT http://localhost:8083/connectors/SimSource/pause
+
+curl -X PUT http://localhost:8083/connectors/CouchbaseSink/pause
+
+curl -X PUT http://localhost:8083/connectors/DynamoSink/pause
+
+docker-compose pause
+

@@ -1,0 +1,59 @@
+#!/bin/bash
+
+DEMO=cbdemo
+DEMO_HOST=localhost
+
+if [ ! -f docker-compose.yml ] ; then
+	echo "Error: demo environment must be launched from docker-compose.yml location"
+	exit 1
+fi
+
+docker-compose up -d
+
+# Initialize couchbase node after it is on-line
+docker logs ${DEMO}_couchbase_1 2> /dev/null | grep -q "Web UI available"
+while [ $? -ne 0 ] ; do
+	sleep 2
+	docker logs ${DEMO}_couchbase_1 | grep -q "Web UI available"
+done
+./init-couchbase-node.sh
+
+# Initialize connectors after connect is on-line
+docker logs ${DEMO}_connect_1 2> /dev/null | grep -q "REST server listening"
+while [ $? -ne 0 ] ; do
+	sleep 2
+	docker logs ${DEMO}_connect_1 | grep -q "REST server listening"
+done
+
+curl -X POST -H "Content-Type: application/json" http://${DEMO_HOST}:8083/connectors --data '@twitter-source.json'
+echo ""
+
+# Wait for topic to get some data before launching sink (otherwise
+# the monitoring interceptors behave strangely).
+sleep 20
+
+curl -X POST -H "Content-Type: application/json" http://${DEMO_HOST}:8083/connectors --data '@file-sink.json'
+echo ""
+
+curl -X POST -H "Content-Type: application/json" http://${DEMO_HOST}:8083/connectors --data '@couchbase-sink.json'
+echo ""
+
+sleep 2
+echo ""
+curl http://${DEMO_HOST}:8083/connectors
+echo ""
+
+
+echo ""
+echo "Demo environment deployed; see previous line for running connectors"
+echo "	Access Control Center at http://${DEMO_HOST}:9021"
+echo "	Access Couchbase Console at http://${DEMO_HOST}:8091"
+echo ""
+echo "Launch streams app with "
+echo "	java -cp \${KSTREAMS_TARGET}/streams-examples-3.1.1-standalone.jar \\"
+echo "     io.confluent.examples.streams.TwitterSentiment"
+echo ""
+echo "The Control Center will show the consumption usage from the"
+echo "streams app and the Couchbase Sink in around 60 seconds"
+echo "(depending on the metadata.max.age.ms setting in the Connect worker)."
+

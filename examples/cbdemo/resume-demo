@@ -1,0 +1,14 @@
+#!/bin/bash
+
+docker-compose unpause
+
+curl -X PUT http://localhost:8083/connectors/TSource/resume
+
+curl -X PUT http://localhost:8083/connectors/FileSink/resume
+
+curl -X PUT http://localhost:8083/connectors/SimSource/resume
+
+curl -X PUT http://localhost:8083/connectors/CouchbaseSink/resume
+
+curl -X PUT http://localhost:8083/connectors/DynamoSink/resume
+
