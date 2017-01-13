@@ -1,0 +1,15 @@
+{
+  "name": "CouchbaseSink",
+  "config": {
+    "connector.class": "com.couchbase.connect.kafka.CouchbaseSinkConnector",
+    "tasks.max": 2,
+    "topics": "filtered-tweets",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "connection.cluster_address":"couchbase",
+    "connection.bucket": "tweets",
+    "connection.timeout.ms": 2000
+  }
+}
+

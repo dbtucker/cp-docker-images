@@ -1,0 +1,9 @@
+{
+  "name": "FileSink",
+  "config": {
+    "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+    "topics": "tweets",
+    "file": "/tmp/tweets"
+  }
+}
+

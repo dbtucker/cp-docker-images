@@ -1,0 +1,19 @@
+
+	"schema": {
+		"type":"struct",
+		"fields":[
+		   {"type":"int16","optional":false,"field":"partition"},
+		   {"type":"string","optional":false,"field":"key"},
+		   {"type":"int32","optional":false,"field":"expiration"},
+		   {"type":"int32","optional":false,"field":"flags"},
+		   {"type":"int64","optional":false,"field":"cas"},
+		   {"type":"int32","optional":false,"field":"lockTime"},
+		   {"type":"int64","optional":false,"field":"bySeqno"},
+		   {"type":"int64","optional":false,"field":"revSeqno"},
+		   {"type":"bytes","optional":false,"field":"content"}
+		],
+		"optional":false,
+		"name":"mutation"
+	}
+
+

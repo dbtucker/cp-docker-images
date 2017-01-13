@@ -1,0 +1,16 @@
+{
+  "name": "SimSource",
+  "config": {
+    "connector.class": "io.confluent.kafka.connect.simulator.SimulatorSourceConnector",
+    "topic": "accounts",
+    "tasks.max": 1,
+    "rate.limit": 2,
+    "batch.size": 2,
+    "key.schema.fields": "email",
+    "key.schema.name": "simulator.source.test.AccountsKey",
+    "value.schema.fields": "email,firstName,lastName,telephoneNumber",
+    "value.schema.name": "simulator.source.test.AccountsValue"
+  }
+}
+
+

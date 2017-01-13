@@ -1,0 +1,12 @@
+{
+  "name": "CSource",
+  "config": {
+    "connector.class": "com.couchbase.connect.kafka.CouchbaseSourceConnector",
+    "tasks.max": 1,
+    "topic.name": "couchbase",
+    "connection.cluster_address": "couchbase",
+    "connection.bucket": "tweets",
+    "connection.timeout_ms": 3000
+  }
+}
+

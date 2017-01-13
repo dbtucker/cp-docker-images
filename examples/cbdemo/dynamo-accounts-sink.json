@@ -1,0 +1,14 @@
+{
+  "name": "DynamoSink",
+  "config": {
+    "connector.class": "dynamok.sink.DynamoDbSinkConnector",
+    "topics": "accounts",
+    "table.format": "${topic}",
+    "max.retries": 60,
+    "retry.backoff.ms": 3000,
+    "access.key.id": "AKIAI4AFCE6GI35DHIEQ",
+    "secret.key.id": "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",
+    "region": "us-west-2"
+  }
+}
+

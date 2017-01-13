@@ -1,0 +1,11 @@
+{
+  "name": "RTest",
+  "config": {
+    "connector.class": "io.confluent.connect.replicator.ReplicatorSourceConnector",
+    "src.kafka.bootstrap.servers": "broker.confluent-kafka.l4lb.thisdcos.directory:9092",
+    "src.zookeeper.connect": "master.mesos:2181/dcos-service-confluent-kafka",
+    "topic.regex": "tweets",
+    "dest.zookeeper.connect": "master.mesos:2181/dcos-service-confluent-target"
+  }
+}
+

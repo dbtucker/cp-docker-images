@@ -1,0 +1,545 @@
+{
+  "schema": {
+    "type": "struct",
+    "fields": [
+      {
+        "type": "int64",
+        "optional": true,
+        "name": "org.apache.kafka.connect.data.Timestamp",
+        "version": 1,
+        "doc": "Return the created_at",
+        "field": "CreatedAt"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "doc": "Returns the id of the status",
+        "field": "Id"
+      },
+      {
+        "type": "string",
+        "optional": true,
+        "doc": "Returns the text of the status",
+        "field": "Text"
+      },
+      {
+        "type": "string",
+        "optional": true,
+        "doc": "Returns the source",
+        "field": "Source"
+      },
+      {
+        "type": "boolean",
+        "optional": true,
+        "doc": "Test if the status is truncated",
+        "field": "Truncated"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "doc": "Returns the in_reply_tostatus_id",
+        "field": "InReplyToStatusId"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "doc": "Returns the in_reply_user_id",
+        "field": "InReplyToUserId"
+      },
+      {
+        "type": "string",
+        "optional": true,
+        "doc": "Returns the in_reply_to_screen_name",
+        "field": "InReplyToScreenName"
+      },
+      {
+        "type": "struct",
+        "fields": [
+          {
+            "type": "double",
+            "optional": false,
+            "field": "Latitude"
+          },
+          {
+            "type": "double",
+            "optional": false,
+            "field": "Longitude"
+          }
+        ],
+        "optional": true,
+        "name": "io.confluent.examples.kafka.connect.twitter.GeoLocation",
+        "doc": "Returns The location that this tweet refers to if available.",
+        "field": "GeoLocation"
+      },
+      {
+        "type": "struct",
+        "fields": [
+          {
+            "type": "string",
+            "optional": true,
+            "field": "Name"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "StreetAddress"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "CountryCode"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "Id"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "Country"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "PlaceType"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "URL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "FullName"
+          }
+        ],
+        "optional": true,
+        "name": "io.confluent.examples.kafka.connect.twitter.Place",
+        "doc": "Returns the place attached to this status",
+        "field": "Place"
+      },
+      {
+        "type": "boolean",
+        "optional": true,
+        "doc": "Test if the status is favorited",
+        "field": "Favorited"
+      },
+      {
+        "type": "boolean",
+        "optional": true,
+        "doc": "Test if the status is retweeted",
+        "field": "Retweeted"
+      },
+      {
+        "type": "int32",
+        "optional": true,
+        "doc": "Indicates approximately how many times this Tweet has been \"favorited\" by Twitter users.",
+        "field": "FavoriteCount"
+      },
+      {
+        "type": "struct",
+        "fields": [
+          {
+            "type": "int64",
+            "optional": true,
+            "doc": "Returns the id of the user",
+            "field": "Id"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "doc": "Returns the name of the user",
+            "field": "Name"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "doc": "Returns the screen name of the user",
+            "field": "ScreenName"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "doc": "Returns the location of the user",
+            "field": "Location"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "doc": "Returns the description of the user",
+            "field": "Description"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "doc": "Tests if the user is enabling contributors",
+            "field": "ContributorsEnabled"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "doc": "Returns the profile image url of the user",
+            "field": "ProfileImageURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "BiggerProfileImageURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "MiniProfileImageURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "OriginalProfileImageURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileImageURLHttps"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "BiggerProfileImageURLHttps"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "MiniProfileImageURLHttps"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "OriginalProfileImageURLHttps"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "doc": "Tests if the user has not uploaded their own avatar",
+            "field": "DefaultProfileImage"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "doc": "Returns the url of the user",
+            "field": "URL"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "doc": "Test if the user status is protected",
+            "field": "Protected"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "doc": "Returns the number of followers",
+            "field": "FollowersCount"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBackgroundColor"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileTextColor"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileLinkColor"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileSidebarFillColor"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileSidebarBorderColor"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "field": "ProfileUseBackgroundImage"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "doc": "Tests if the user has not altered the theme or background",
+            "field": "DefaultProfile"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "field": "ShowAllInlineMedia"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "doc": "Returns the number of users the user follows (AKA \"followings\")",
+            "field": "FriendsCount"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "name": "org.apache.kafka.connect.data.Timestamp",
+            "version": 1,
+            "field": "CreatedAt"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "field": "FavouritesCount"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "field": "UtcOffset"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "TimeZone"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBackgroundImageURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBackgroundImageUrlHttps"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBannerURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBannerRetinaURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBannerIPadURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBannerIPadRetinaURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBannerMobileURL"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "ProfileBannerMobileRetinaURL"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "field": "ProfileBackgroundTiled"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "doc": "Returns the preferred language of the user",
+            "field": "Lang"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "field": "StatusesCount"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "field": "GeoEnabled"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "field": "Verified"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "field": "Translator"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "doc": "Returns the number of public lists the user is listed on, or -1 if the count is unavailable.",
+            "field": "ListedCount"
+          },
+          {
+            "type": "boolean",
+            "optional": true,
+            "doc": "Returns true if the authenticating user has requested to follow this user, otherwise false.",
+            "field": "FollowRequestSent"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "optional": false
+            },
+            "optional": false,
+            "doc": "Returns the list of country codes where the user is withheld",
+            "field": "WithheldInCountries"
+          }
+        ],
+        "optional": false,
+        "name": "io.confluent.examples.kafka.connect.twitter.User",
+        "doc": "Return the user associated with the status.\nThis can be null if the instance is from User.getStatus().",
+        "field": "User"
+      },
+      {
+        "type": "boolean",
+        "optional": true,
+        "field": "Retweet"
+      },
+      {
+        "type": "array",
+        "items": {
+          "type": "int64",
+          "optional": false
+        },
+        "optional": false,
+        "doc": "Returns an array of contributors, or null if no contributor is associated with this status.",
+        "field": "Contributors"
+      },
+      {
+        "type": "int32",
+        "optional": true,
+        "doc": "Returns the number of times this tweet has been retweeted, or -1 when the tweet was created before this feature was enabled.",
+        "field": "RetweetCount"
+      },
+      {
+        "type": "boolean",
+        "optional": true,
+        "field": "RetweetedByMe"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "doc": "Returns the authenticating user's retweet's id of this tweet, or -1L when the tweet was created before this feature was enabled.",
+        "field": "CurrentUserRetweetId"
+      },
+      {
+        "type": "boolean",
+        "optional": true,
+        "field": "PossiblySensitive"
+      },
+      {
+        "type": "string",
+        "optional": true,
+        "doc": "Returns the lang of the status text if available.",
+        "field": "Lang"
+      },
+      {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "optional": false
+        },
+        "optional": false,
+        "doc": "Returns the list of country codes where the tweet is withheld",
+        "field": "WithheldInCountries"
+      }
+    ],
+    "optional": false,
+    "name": "io.confluent.examples.kafka.connect.twitter.Status"
+  },
+  "payload": {
+    "CreatedAt": 1479252348000,
+    "Id": 798668350956126200,
+    "Text": "Iago Aspas pays tribute to #Spain players for making his international debut “easy” vs #England… https://t.co/G13NUaZj8W",
+    "Source": "<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>",
+    "Truncated": true,
+    "InReplyToStatusId": -1,
+    "InReplyToUserId": -1,
+    "InReplyToScreenName": null,
+    "GeoLocation": null,
+    "Place": null,
+    "Favorited": false,
+    "Retweeted": false,
+    "FavoriteCount": 0,
+    "User": {
+      "Id": 467781580,
+      "Name": "footballespana",
+      "ScreenName": "footballespana_",
+      "Location": null,
+      "Description": "The website for English-speaking fans of Spanish football, brought to you by the team behind @footballitalia",
+      "ContributorsEnabled": false,
+      "ProfileImageURL": "http://pbs.twimg.com/profile_images/2514928368/jw969ejebcot6s19ctkx_normal.jpeg",
+      "BiggerProfileImageURL": "http://pbs.twimg.com/profile_images/2514928368/jw969ejebcot6s19ctkx_bigger.jpeg",
+      "MiniProfileImageURL": "http://pbs.twimg.com/profile_images/2514928368/jw969ejebcot6s19ctkx_mini.jpeg",
+      "OriginalProfileImageURL": "http://pbs.twimg.com/profile_images/2514928368/jw969ejebcot6s19ctkx.jpeg",
+      "ProfileImageURLHttps": "https://pbs.twimg.com/profile_images/2514928368/jw969ejebcot6s19ctkx_normal.jpeg",
+      "BiggerProfileImageURLHttps": "https://pbs.twimg.com/profile_images/2514928368/jw969ejebcot6s19ctkx_bigger.jpeg",
+      "MiniProfileImageURLHttps": "https://pbs.twimg.com/profile_images/2514928368/jw969ejebcot6s19ctkx_mini.jpeg",
+      "OriginalProfileImageURLHttps": "https://pbs.twimg.com/profile_images/2514928368/jw969ejebcot6s19ctkx.jpeg",
+      "DefaultProfileImage": false,
+      "URL": "http://www.football-espana.net",
+      "Protected": false,
+      "FollowersCount": 24763,
+      "ProfileBackgroundColor": "FAFAFA",
+      "ProfileTextColor": "FAA525",
+      "ProfileLinkColor": "FAA525",
+      "ProfileSidebarFillColor": "FC4E54",
+      "ProfileSidebarBorderColor": "0B3E57",
+      "ProfileUseBackgroundImage": true,
+      "DefaultProfile": false,
+      "ShowAllInlineMedia": false,
+      "FriendsCount": 291,
+      "CreatedAt": 1326920230000,
+      "FavouritesCount": 95,
+      "UtcOffset": 0,
+      "TimeZone": "London",
+      "ProfileBackgroundImageURL": "http://pbs.twimg.com/profile_background_images/658460251/64zpyk7n6siurlkdov8o.jpeg",
+      "ProfileBackgroundImageUrlHttps": "https://pbs.twimg.com/profile_background_images/658460251/64zpyk7n6siurlkdov8o.jpeg",
+      "ProfileBannerURL": "https://pbs.twimg.com/profile_banners/467781580/1475581828/web",
+      "ProfileBannerRetinaURL": "https://pbs.twimg.com/profile_banners/467781580/1475581828/web_retina",
+      "ProfileBannerIPadURL": "https://pbs.twimg.com/profile_banners/467781580/1475581828/ipad",
+      "ProfileBannerIPadRetinaURL": "https://pbs.twimg.com/profile_banners/467781580/1475581828/ipad_retina",
+      "ProfileBannerMobileURL": "https://pbs.twimg.com/profile_banners/467781580/1475581828/mobile",
+      "ProfileBannerMobileRetinaURL": "https://pbs.twimg.com/profile_banners/467781580/1475581828/mobile_retina",
+      "ProfileBackgroundTiled": false,
+      "Lang": "en",
+      "StatusesCount": 46167,
+      "GeoEnabled": false,
+      "Verified": false,
+      "Translator": false,
+      "ListedCount": 686,
+      "FollowRequestSent": false,
+      "WithheldInCountries": []
+    },
+    "Retweet": false,
+    "Contributors": [],
+    "RetweetCount": 0,
+    "RetweetedByMe": false,
+    "CurrentUserRetweetId": -1,
+    "PossiblySensitive": false,
+    "Lang": "en",
+    "WithheldInCountries": []
+  }
+}
+
+

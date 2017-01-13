@@ -1,0 +1,20 @@
+{
+  "name": "DynamoSink",
+  "config": {
+    "connector.class": "dynamok.sink.DynamoDbSinkConnector",
+    "topics": "filtered-tweets",
+    "table.format": "tweets",
+    "top.key.attribute": "id",
+    "ignore.record.key": "true",
+    "batch.size": 1,
+    "max.retries": 60,
+    "retry.backoff.ms": 3000,
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "access.key.id": "AKIAI4AFCE6GI35DHIEQ",
+    "secret.key.id": "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",
+    "region": "us-west-2"
+  }
+}
+

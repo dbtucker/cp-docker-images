@@ -1,0 +1,15 @@
+#!/bin/bash
+
+DEMO=cbdemo
+
+if [ ! -f docker-compose.yml ] ; then
+	echo "Error: demo environment must be launched from docker-compose.yml location"
+	exit 1
+fi
+
+docker-compose down
+
+sleep 2
+for v in zkdata brokerdata ccdata secrets cbdata ; do
+	docker volume rm ${DEMO}_$v
+done

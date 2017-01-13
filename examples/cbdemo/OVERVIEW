@@ -1,0 +1,207 @@
+Feeling Lucky ?
+	The "launch-demo" script will spin up all the necessary docker 
+	images and deploy the Twitter Source Connector and File Sink
+	connector on the tweets topic.  The result SHOULD BE a functioning
+	ControlCenter interface at http://localhost:9021 
+		The "abort-demo" script shuts everything down and deletes
+		the docker volumes to avoid data carry-over.
+
+		The "pause-demo" and "resume-demo" scripts (untested) will 
+		will stop the demo but leave the docker infrastructure in 
+		place.
+
+	NOTE: If you need to use regular Kafka clients (eg a streams app),
+	make sure you have an entry for host "broker" in /etc/hosts that
+	maps to 127.0.0.1.   The ZK and Connect REST interfaces can be
+	accessed from the exposed container ports; no host naming is 
+	required.
+
+	NOTE2: This demo has no Kafka REST Proxy service configured.
+
+Data flow :
+	1. Twitter Source connector deployed ... data written to Kafka topic "tweets"
+		(kafka.status.topic in Connector configuration)
+
+	2. File Sink connector deployed to consume tweets topic and spool to disk.
+
+	3. K-streams App twitter-sentiment does several operations
+		a. Ingests "tweets" topics, transforms Geo data and computes 
+		   Sentiment score, writing both back to the record.
+		b. Write the record to the "tweets" bucket in Couchbase (bucket must
+		   be pre-created).  NOTE: disabled for AWS re:Invent operation.
+		c. Create a new Kafka topic (filtered-tweets) with the key as the 
+		   tweet id and the json data payload containing a few key fields (creation
+		   date, UserName, etc) along with the sentiment score (and string).
+
+	4. Second Connector (DynamoDB-Sink) lands filtered-tweets into a 
+		DynamoDB table tweets.
+			NOTE: The table MUST already exist.  The primary key for the 
+			table is "id" of type "string".
+
+		   					OR
+
+	2. File Sink connector deployed to consume tweets topic and spool to disk.
+
+	3. K-Streams App tweet-processing transforms GEO-location of 
+		topic "tweets" and writes data to Couchbase bucket "tweets"
+			(bucket must be pre-created).
+
+	4. Couchbase connector deployed ... data written to Kafka topic "couchbase"
+		(topic.name in Connector configuration)
+
+	5. K-Streams App tweets-sentiment-couchbase enhances Kafka topic "couchbase"
+		with natural language sentiment processing.  The enhanced record
+		is written BACK to the couchbase topic (with the same key) and a
+		VERY SIMPLE <key>/<value> entry is written to a new topic 
+		(tweet-sentiments)   That tweet-sentiment topic is simply a
+		<string> key and an <integer> value (Not easily parsable by Connect).
+
+		NLP library can upsert about 5 docs per second
+
+
+Schema details :
+    See twitter.schema and couchbase.schema in this directory.
+
+	See twitter.sample and sentiments.sample for sample data from the different
+	topics (in case you need to test outside of the demo environment).
+
+
+Browser details :
+	- We'll use the Confluent AWS account at 
+			https://368821881613.signin.aws.amazon.com/console
+
+	- A second window should be tracking the Confluent Control Center
+			52.41.69.112 ip-10-20-15-38 	ip-10-20-15-38.us-west-2.compute.internal reinvent-node0
+			http://reinvent-node0:9021
+			
+Setup the infrastructure (all docker):
+	- "docker-compose up -d" in this directory 
+		(note that it uses the dbtucker version of kafka-connect image)
+	- make sure your '/etc/hosts' file has entries mapping "broker"
+		to "localhost" (in order to support command line operations
+		to read cluster data).
+
+Setup the infrastructure (hybrid):
+	- launch your local zk, broker, and connect worker services
+		Make sure all services are available on localhost
+	- launch local control-center service
+	- start docker image with couchbase server (if necessary).
+		docker run --name cbnode -i -t  \
+			-p "8091-8099:8091-8099" -p "11210:11210" \
+			couchbase:enterprise-4.5.1
+
+Deployment (see launch-demo for scripted mechanics):
+    - initialize couchbase server (NOT NECESSARY for AWS re:Invent demo)
+        ./init-couchbase-node.sh 
+
+    - start twitter source
+        curl -X POST -H "Content-Type: application/json" \
+            http://localhost:8083/connectors --data @twitter-source.json 
+        
+    - confirm twitter data landing in Kafka topic "tweets"
+		# see tweet monitor commands below
+
+    - [optional] start FileSink connector consuming tweets
+        curl -X POST -H "Content-Type: application/json" \
+            http://localhost:8083/connectors --data @file-sink.json 
+
+    - [optional] Confirm FileSink connector 
+		docker exec -i -t cbdemo_connect_1 /bin/bash -c 'tail -f /tmp/tweets'
+
+    - start tweet-processing streams application
+		java -cp target/streams-examples-3.1.1-standalone.jar \
+			io.confluent.examples.streams.TwitterSentiment
+
+    - confirm data landing in Kafka topic "filtered-tweets"
+		# see filtered-tweets monitor commands below
+
+    - start DynamoSink connector consuming filtered-tweets
+        curl -X POST -H "Content-Type: application/json" \
+            http://localhost:8083/connectors --data @dynamo-tweets-sink.json 
+
+    - confirm data arriving at couchbase 
+	  (if StreamsApp has been configured for that)
+		http://localhost:8091   (Administrator / password)
+			Check the "tweets" bucket; ops/sec will match twitter rate
+
+	- start couchbase source
+	  (if Couchbase is required)
+        curl -X POST -H "Content-Type: application/json" \
+            http://localhost:8083/connectors --data @couchbase-source.json 
+        
+Monitoring (note difference depending on JSON vs AVRO converter):
+		# Show text of arriving tweets
+	/opt/confluent/bin/kafka-console-consumer --topic tweets \
+	--from-beginning --new-consumer --bootstrap-server localhost:9092 \
+    --consumer.config /opt/confluent/etc/kafka/consumer.properties \
+	| jq -r '.payload.Text'
+
+	/opt/confluent/bin/kafka-avro-console-consumer --topic tweets \
+	--from-beginning --new-consumer --bootstrap-server localhost:9092 \
+	--property schema.registry.url=http://schema_registry:8081 \
+    --consumer.config /opt/confluent/etc/kafka/consumer.properties \
+	| jq -r '.Text.string'
+
+		# Show filtered-tweets (no Schema on this topic)
+		#	Note use of group.id to "simulate" the DynamoDB connector.
+		#	if the connector is running, discard that option.
+	/opt/confluent/bin/kafka-console-consumer --topic filtered-tweets \
+	--from-beginning --new-consumer --bootstrap-server localhost:9092 \
+    --property group.id=connect-DynamoSink \
+    --consumer.config /opt/confluent/etc/kafka/consumer.properties 
+
+		# Show Couchbase doc keys of docs writtent o couchbase topic
+	/opt/confluent/bin/kafka-console-consumer --topic couchbase \
+	--from-beginning --new-consumer --bootstrap-server localhost:9092 \
+	| jq -r '.payload.key'
+
+		# Show Twitter text extracted back out from Couch docs
+		# Horrific shell to decode the base64 encoding from 
+		# Couchbase source
+	while read -r line; do echo $line | base64 --decode ; done \
+	< <(/opt/confluent/bin/kafka-console-consumer --new-consumer --bootstrap-server localhost:9092 --topic couchbase --from-beginning | jq -r '.payload.content') | jq .Text
+
+		# Show twitter-sentiments topic
+	/opt/confluent/bin/kafka-console-consumer --topic twitter-sentiments \
+	--from-beginning --new-consumer --bootstrap-server localhost:9092 \
+
+
+Clean up (while docker-compose is running but Streams apps are stoped):
+    curl -X DELETE http://localhost:8083/TSource
+    curl -X DELETE http://localhost:8083/FileSink
+    curl -X DELETE http://localhost:8083/CSource
+
+	kafka-streams-application-reset \
+		--application-id tweets-sentiment-couchbase \
+		--input-topics couchbase \
+		--intermediate-topics tweet-sentiments
+
+	kafka-streams-application-reset \
+		--application-id tweet-processing \
+		--input-topics tweets
+
+	kafka-topics --delete --topic couchbase tweets
+
+	# Probably best to shutdown Connect Workers and delete the 
+	# connect offsets topic (default is connect-offsets) to avoid
+	# issues if Connectors are restarted.
+
+Clean up (between invocations (if you want to dump ALL the data)
+	docker-compose down
+	docker volume rm cbdemo_brokerdata cbdemo_ccdata cbdemo_zkdata
+	docker volume rm cbdemo_secrets cbdemo_cbdata
+		OR
+	./abort-demo 
+
+
+Other Connectors
+	Misc json files can be used to deploy other connectors.
+	Useful tool is the Simulator connector (SimulatorSource.json).
+
+
+TROUBLESHOOTING
+	- The launch-demo script sometimes goes too fast through
+	  the initialization of the couchbase server.  If the Streams
+	  application throws an error regarding the Couchbase Bucket,
+	  simply re-run the init-couchbase.sh script.
+
